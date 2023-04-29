@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import Panell from './components/Panell';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -37,10 +37,11 @@ function App() {
     mostrarPanell(idSeleccionado, event);
   };
 
-  const mostrarPanell = idRow => {
-    if (idRow === 1) {
+
+  const mostrarPanell = (idRow, event) => {
+    if (idRow === 1 && event.target.checked === true) {
       setMostrarOpcionsWeb(!mostrarOpcionsWeb);
-    } else if (idRow === 1) {
+    } else if (idRow === 1 && event.target.checked === false) {
       setState({ ...state, nIdiomas: 0, nPaginas: 0, total: sumatorio() })
       setMostrarOpcionsWeb(!mostrarOpcionsWeb);
     }
