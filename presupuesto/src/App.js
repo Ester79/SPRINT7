@@ -1,6 +1,8 @@
-import logo from './logo.svg';
-import React, { useEffect, useState } from 'react';
+
+import React, { useState } from 'react';
 import './App.css';
+import Panell from './components/Panell';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const arrayOptions = [
   { id: 1, description: 'Una pagina web (500€)', name: 'web', precio: 500 },
@@ -12,27 +14,51 @@ const initState = {
   precio: 0,
   seleccionado: [],
   total: 0,
+  nPaginas: 0,
+  nIdiomas: 0,
 }
 
 function App() {
 
-  const [state, setState] = useState({ ...initState })
+  const [state, setState] = useState({ ...initState });
+  const [mostrarOpcionsWeb, setMostrarOpcionsWeb] = useState(false);
+  const tarifaSuplementoWeb = 30;
 
-  const seleccionarOpcion = (event) => {
+  const seleccionarOpcion = event => {
     const idSeleccionado = parseInt(event.target.id);
     const filtrado = arrayOptions.find(element => element.id === idSeleccionado);
     if (state.seleccionado.includes(filtrado)) {
       const indiceBorrar = state.seleccionado.indexOf(filtrado);
-      state.seleccionado.splice(indiceBorrar, 1)
+      state.seleccionado.splice(indiceBorrar, 1);
     } else {
-      state.seleccionado.push(filtrado)
+      state.seleccionado.push(filtrado);
     }
     setState({ ...state, total: sumatorio() })
+    mostrarPanell(idSeleccionado, event);
   };
 
-  const sumatorio = () => {
-    return state.seleccionado.map(elemento => elemento.precio).reduce((accumulated, currentValue) => accumulated + currentValue, 0)
+  const mostrarPanell = idRow => {
+    if (idRow === 1) {
+      setMostrarOpcionsWeb(!mostrarOpcionsWeb);
+    } else if (idRow === 1) {
+      setState({ ...state, nIdiomas: 0, nPaginas: 0, total: sumatorio() })
+      setMostrarOpcionsWeb(!mostrarOpcionsWeb);
+    }
+  }
 
+  const calcularSuplementoWeb = (cantidad) => {
+    let tipo = cantidad.target.name;
+    let cantidadSeleccionada = parseInt(cantidad.target.value);
+    if (tipo === 'nPaginas') {
+      setState({ ...state, nPaginas: tarifaSuplementoWeb * cantidadSeleccionada })
+    } else if (tipo === 'nIdiomas') {
+      setState({ ...state, nIdiomas: tarifaSuplementoWeb * cantidadSeleccionada })
+    }
+  }
+
+
+  const sumatorio = () => {
+    return state.seleccionado.map(elemento => elemento.precio).reduce((accumulated, currentValue) => accumulated + currentValue, 0);
   }
 
 
@@ -48,9 +74,9 @@ function App() {
             </div>
           ))
         }
-        <p>Preu:  {state.total}</p>
+        {mostrarOpcionsWeb && <Panell contarCantidad={calcularSuplementoWeb} paginas={state.nPaginas} idiomas={state.nIdiomas} />}
+        <p>Preu:  {state.total + state.nPaginas + state.nIdiomas} </p>
       </div>
-
     </>
   )
 
