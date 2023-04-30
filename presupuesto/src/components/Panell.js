@@ -2,35 +2,25 @@ import '../App.css';
 import PropTypes from 'prop-types';
 
 
-const Panell = ({ contarCantidad }) => {
+const Panell = ({ contarCantidad, sumar, restar, numeroPaginas, numeroIdiomas }) => {
 
     return (
         <div >
-            <form className="cajaForm">
-                <div className="mb-3 d-flex">
-                    <p className="col-md-5">Número de páginas</p>
-                    <input
-                        placeholder="Número de paginas"
-                        className="form-control"
-                        type="number"
-                        min={0}
-                        name="nPaginas"
-                        onChange={contarCantidad}
-                    >
-                    </input>
+            <form className='cajaForm'>
+                <div className="grupo mb-3">
+                    <div className="col-md-5">Numero de páginas</div>
+                    <span className="btn btn-warning" id="sumarPagina" onClick={sumar}>+</span>
+                    <input type="number" name="nPaginas" min={0} id='inputPaginas'
+                        className='col-md-3 border-0' onChange={contarCantidad} value={numeroPaginas} />
+                    <span className="btn btn-warning" id="restarPagina" onClick={restar}>-</span>
                 </div>
-                <div className="d-flex">
-                    <p className="col-md-5">Número de idiomas</p>
-                    <input
-                        placeholder="Número de idiomas"
-                        className="form-control"
-                        type="number"
-                        min={0}
-                        name="nIdiomas"
-                        onChange={contarCantidad}>
-                    </input>
+                <div className="grupo mb-3">
+                    <div className="col-md-5">Numero de idiomas</div>
+                    <span className="btn btn-warning" id="sumarIdioma" onClick={sumar}>+</span>
+                    <input type="number" name="nIdiomas" min={0} id='inputIdiomas'
+                        className='col-md-3 border-0' onChange={contarCantidad} value={numeroIdiomas} />
+                    <span className="btn btn-warning" id="restarIdioma" onClick={restar}>-</span>
                 </div>
-
             </form>
         </div>
     )
@@ -38,8 +28,10 @@ const Panell = ({ contarCantidad }) => {
 
 Panell.propTypes = {
     contarCantidad: PropTypes.func,
-    paginas: PropTypes.number,
-    idiomas: PropTypes.number,
+    sumar: PropTypes.func,
+    restar: PropTypes.func,
+    numeroPaginas: PropTypes.number,
+    numeroIdiomas: PropTypes.number,
 }
 
 export default Panell;

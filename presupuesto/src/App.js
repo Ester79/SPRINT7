@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import Panell from './components/Panell';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -14,8 +14,10 @@ const initState = {
   precio: 0,
   seleccionado: [],
   total: 0,
-  nPaginas: 0,
-  nIdiomas: 0,
+  numeroDePaginas: 0,
+  numeroDeIdiomas: 0,
+  precioFinalPaginas: 0,
+  precioFinalIdiomas: 0,
 }
 
 function App() {
@@ -23,6 +25,22 @@ function App() {
   const [state, setState] = useState({ ...initState });
   const [mostrarOpcionsWeb, setMostrarOpcionsWeb] = useState(false);
   const tarifaSuplementoWeb = 30;
+
+  const botonSumar = event => {
+    if (event.target.id === 'sumarPagina') {
+      setState({ ...state, numeroDePaginas: state.numeroDePaginas + 1, precioFinalPaginas: state.precioFinalPaginas + tarifaSuplementoWeb })
+    } else if (event.target.id === 'sumarIdioma') {
+      setState({ ...state, numeroDeIdiomas: state.numeroDeIdiomas + 1, precioFinalIdiomas: state.precioFinalIdiomas + tarifaSuplementoWeb })
+    }
+  }
+
+  const botonRestar = event => {
+    if (event.target.id === 'restarPagina' && state.numeroDePaginas > 0) {
+      setState({ ...state, numeroDePaginas: state.numeroDePaginas - 1, precioFinalPaginas: state.precioFinalPaginas - tarifaSuplementoWeb })
+    } else if (event.target.id === 'restarIdioma' && state.numeroDeIdiomas > 0) {
+      setState({ ...state, numeroDeIdiomas: state.numeroDeIdiomas - 1, precioFinalIdiomas: state.precioFinalIdiomas - tarifaSuplementoWeb })
+    }
+  }
 
   const seleccionarOpcion = event => {
     const idSeleccionado = parseInt(event.target.id);
@@ -37,12 +55,11 @@ function App() {
     mostrarPanell(idSeleccionado, event);
   };
 
-
   const mostrarPanell = (idRow, event) => {
     if (idRow === 1 && event.target.checked === true) {
       setMostrarOpcionsWeb(!mostrarOpcionsWeb);
     } else if (idRow === 1 && event.target.checked === false) {
-      setState({ ...state, nIdiomas: 0, nPaginas: 0, total: sumatorio() })
+      setState({ ...state, numeroDeIdiomas: 0, numeroDePaginas: 0, precioFinalIdiomas: 0, precioFinalPaginas: 0, total: sumatorio() })
       setMostrarOpcionsWeb(!mostrarOpcionsWeb);
     }
   }
@@ -51,9 +68,15 @@ function App() {
     let tipo = cantidad.target.name;
     let cantidadSeleccionada = parseInt(cantidad.target.value);
     if (tipo === 'nPaginas') {
-      setState({ ...state, nPaginas: tarifaSuplementoWeb * cantidadSeleccionada })
+      setState({ ...state, precioFinalPaginas: tarifaSuplementoWeb * cantidadSeleccionada, numeroDePaginas: cantidadSeleccionada })
+      if (isNaN(cantidadSeleccionada)) {
+        setState({ ...state, precioFinalPaginas: 0 })
+      }
     } else if (tipo === 'nIdiomas') {
-      setState({ ...state, nIdiomas: tarifaSuplementoWeb * cantidadSeleccionada })
+      setState({ ...state, precioFinalIdiomas: tarifaSuplementoWeb * cantidadSeleccionada, numeroDeIdiomas: cantidadSeleccionada })
+      if (isNaN(cantidadSeleccionada)) {
+        setState({ ...state, precioFinalIdiomas: 0 })
+      }
     }
   }
 
@@ -61,7 +84,6 @@ function App() {
   const sumatorio = () => {
     return state.seleccionado.map(elemento => elemento.precio).reduce((accumulated, currentValue) => accumulated + currentValue, 0);
   }
-
 
   return (
     <>
@@ -75,8 +97,8 @@ function App() {
             </div>
           ))
         }
-        {mostrarOpcionsWeb && <Panell contarCantidad={calcularSuplementoWeb} paginas={state.nPaginas} idiomas={state.nIdiomas} />}
-        <p>Preu:  {state.total + state.nPaginas + state.nIdiomas} </p>
+        {mostrarOpcionsWeb && <Panell sumar={botonSumar} restar={botonRestar} contarCantidad={calcularSuplementoWeb} numeroPaginas={state.numeroDePaginas} numeroIdiomas={state.numeroDeIdiomas} />}
+        <p>Preu:  {state.total + state.precioFinalPaginas + state.precioFinalIdiomas}  </p>
       </div>
     </>
   )
