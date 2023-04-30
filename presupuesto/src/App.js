@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import Panell from './components/Panell';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -25,6 +25,17 @@ function App() {
   const [state, setState] = useState({ ...initState });
   const [mostrarOpcionsWeb, setMostrarOpcionsWeb] = useState(false);
   const tarifaSuplementoWeb = 30;
+
+  useEffect(() => {
+    localStorage.setItem('Paginas: ', JSON.stringify(state.numeroDePaginas));
+    localStorage.setItem('Coste total Paginas: ', JSON.stringify(state.numeroDePaginas * tarifaSuplementoWeb));
+    localStorage.setItem('Idiomas: ', JSON.stringify(state.numeroDeIdiomas));
+    localStorage.setItem('Coste total Idiomas: ', JSON.stringify(state.numeroDeIdiomas * tarifaSuplementoWeb));
+    localStorage.setItem('Seleccion', JSON.stringify(state))
+    localStorage.setItem('Coste total final: ', JSON.stringify(state.total + state.precioFinalIdiomas + state.precioFinalPaginas))
+
+
+  }, [state.numeroDePaginas, state.numeroDeIdiomas, state.seleccionado, state])
 
   const botonSumar = event => {
     if (event.target.id === 'sumarPagina') {
