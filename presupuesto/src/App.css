@@ -1,5 +1,7 @@
 .App {
+  display: flex;
   margin: 40px;
+  min-height: fit-content;
 }
 
 .elements {
@@ -30,4 +32,47 @@
   border: none;
   text-align: center;
   cursor: pointer;
+}
+
+.cabeceraPresupuesto {
+  margin-inline-end: 10px;
+  margin-bottom: 30px;
+}
+
+.columnaIzquierda {
+  width: 40%;
+}
+
+.columnaDerecha {
+  width: 60%;
+  padding: 15px;
+  margin-left: 15px;
+}
+
+.listado {
+  border: 1px solid black;
+  padding: 20px;
+  padding-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  border-radius: 5px;
+}
+
+p {
+  text-transform: uppercase;
+}
+
+.grupoListado {
+  background-color: aliceblue;
+}
+
+.costesFinales {
+  background-color: deepskyblue;
+  height: 50px;
+  border-radius: 5px;
+}
+
+.ctotal {
+  background-color: grey;
+  color: white;
 }

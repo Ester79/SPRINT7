@@ -9,7 +9,7 @@ const Panell = ({ contarCantidad, sumar, restar, numeroPaginas, numeroIdiomas, a
 
     return (
         <div >
-            <form className='cajaForm'>
+            <form className='cajaForm mt-4'>
                 <div className="grupo mb-3">
                     <div className="col-md-5">Numero de páginas</div>
                     <span className="btn btn-warning" id="sumarPagina" onClick={sumar}>+</span>
