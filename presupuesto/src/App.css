@@ -20,3 +20,14 @@
   display: flex;
   align-items: center;
 }
+
+.info {
+  background-color: grey;
+  color: white;
+  width: 20px;
+  margin-left: 10px;
+  border-radius: 60px;
+  border: none;
+  text-align: center;
+  cursor: pointer;
+}
