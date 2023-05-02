@@ -76,3 +76,14 @@ p {
   background-color: grey;
   color: white;
 }
+
+.grupoOpcionesBotones {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.grupoOrdenar {
+  margin-right: 10px;
+  width: 150px;
+}

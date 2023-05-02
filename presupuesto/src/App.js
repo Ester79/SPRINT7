@@ -14,18 +14,17 @@ const initState = {
     numeroDePaginas: 0,
     numeroDeIdiomas: 0,
     albaranes: [],
-    albaranGuardado: false,
 };
 
 function App() {
 
     const [state, setState] = useState({ ...initState });
     const [mostrarOpcionsWeb, setMostrarOpcionsWeb] = useState(false);
-    const [mostrarListado, setMostrarListado] = useState(false);
     const [seleccionado, setSeleccionado] = useState([]);
     const tarifaSuplementoWeb = 30;
     const [nombreCliente, setNombreCliente] = useState(undefined);
     const [nombrePresupuesto, setNombrePresupuesto] = useState(undefined);
+    const [orderBy, setOrderBy] = useState(undefined);
     const deshabilitarConfirmar = !nombreCliente || nombreCliente === "" || !nombrePresupuesto || nombrePresupuesto === "";
 
 
@@ -101,6 +100,7 @@ function App() {
     const precioTotalIdiomas = state.numeroDeIdiomas * tarifaSuplementoWeb;
     const total = sumatorio() + precioTotalPaginas + precioTotalIdiomas;
 
+
     const guardarPresupuesto = () => {
         const fecha = new Date();
         const nuevoAlbaran = {
@@ -111,8 +111,9 @@ function App() {
             costeDesglosado: { servicios: state.total, opcionesWeb: precioTotalPaginas + precioTotalIdiomas },
             costeTotal: total,
             fechaPedido: fecha.toDateString(),
+            fecha: fecha,
         };
-        setState({ ...state, albaranes: [...state.albaranes, nuevoAlbaran], albaranGuardado: true, numeroDeIdiomas: 0, numeroDePaginas: 0 });
+        setState({ ...state, albaranes: [...state.albaranes, nuevoAlbaran], numeroDeIdiomas: 0, numeroDePaginas: 0 });
         setNombreCliente("");
         setNombrePresupuesto("");
         setSeleccionado([]);
@@ -123,6 +124,38 @@ function App() {
         const filtrado = arrayOptions.find(element => element.id === e.id);
         return seleccionado.includes(filtrado);
     });
+
+
+    const ordenar = () => {
+        if (orderBy === 'proyectos') {
+            return state.albaranes.sort(function (a, b) {
+
+                if (a.proyecto > b.proyecto) {
+                    return 1;
+                }
+                if (a.proyecto < b.proyecto) {
+                    return -1
+                }
+                return 0
+
+            })
+        } else if (orderBy === 'fecha') {
+            return state.albaranes.sort(function (a, b) {
+
+                if (a.fecha > b.fecha) {
+                    return 1;
+                }
+                if (a.fecha < b.fecha) {
+                    return -1
+                }
+                return 0
+
+            })
+        }
+        return state.albaranes;
+    }
+
+    const arrayOrdenada = ordenar();
 
     return (
         <>
@@ -151,10 +184,16 @@ function App() {
                     <p className='mt-3'>Preu: {total}€</p>
                     <button className='btn btn-secondary' onClick={guardarPresupuesto} disabled={deshabilitarConfirmar}>Confirmar Presupuesto</button>
                 </div>
-                <div className='columnaDerecha' hidden={mostrarListado}>
+                <div className='columnaDerecha'>
+                    <div className="grupoOpcionesBotones">
+                        <button className="btn btn-primary grupoOrdenar" onClick={() => setOrderBy("proyectos")}>Ordena por Proyecto</button>
+                        <button className="btn btn-primary grupoOrdenar" onClick={() => setOrderBy("fecha")} >Ordena por Fecha</button>
+                        <button className="btn btn-warning grupoOrdenar" onClick={() => setOrderBy("")} >Reinicializar Orden</button>
+                    </div>
+
                     <h2>Proyectos confirmados:</h2>
                     <div >
-                        {state.albaranes.map((albaran, index) =>
+                        {arrayOrdenada.map((albaran, index) =>
                             <div key={index} className='listado '>
                                 <div className='row grupoListado'>
                                     <div className='col-md-4 d-flex'>
