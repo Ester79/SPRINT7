@@ -157,6 +157,8 @@ function App() {
 
     const arrayOrdenada = ordenar();
 
+    const [buscar, setBuscar] = useState("");
+
     return (
         <>
             <div className='App'>
@@ -185,53 +187,66 @@ function App() {
                     <button className='btn btn-secondary' onClick={guardarPresupuesto} disabled={deshabilitarConfirmar}>Confirmar Presupuesto</button>
                 </div>
                 <div className='columnaDerecha'>
+
                     <div className="grupoOpcionesBotones">
                         <button className="btn btn-primary grupoOrdenar" onClick={() => setOrderBy("proyectos")}>Ordena por Proyecto</button>
                         <button className="btn btn-primary grupoOrdenar" onClick={() => setOrderBy("fecha")} >Ordena por Fecha</button>
                         <button className="btn btn-warning grupoOrdenar" onClick={() => setOrderBy("")} >Reinicializar Orden</button>
                     </div>
 
+
                     <h2>Proyectos confirmados:</h2>
+                    <div>
+                        <input placeholder="Buscar proyecto" className='form-control mt-3 mb-3' onChange={event => setBuscar(event.target.value)} />
+                    </div>
                     <div >
-                        {arrayOrdenada.map((albaran, index) =>
-                            <div key={index} className='listado '>
-                                <div className='row grupoListado'>
-                                    <div className='col-md-4 d-flex'>
-                                        Proyecto [ <strong><p>{albaran.proyecto}</p></strong>]
+
+                        {
+                            arrayOrdenada.filter(proyectoNombre => {
+                                if (buscar === "") {
+                                    return proyectoNombre;
+                                } else if (proyectoNombre.proyecto.toLowerCase().includes(buscar.toLowerCase())) {
+                                    return proyectoNombre;
+                                }
+                            }).map((albaran, index) =>
+                                <div key={index} className='listado '>
+                                    <div className='row grupoListado'>
+                                        <div className='col-md-4 d-flex'>
+                                            Proyecto [ <strong><p>{albaran.proyecto}</p></strong>]
+                                        </div>
+                                        <div className='col-md-4 d-flex'>
+                                            Cliente [ <strong><p>{albaran.cliente}</p></strong>]
+                                        </div>
+                                        <div className='col-md-4 d-flex'>
+                                            Fecha [ <strong><p>{albaran.fechaPedido}</p></strong>]
+                                        </div>
                                     </div>
-                                    <div className='col-md-4 d-flex'>
-                                        Cliente [ <strong><p>{albaran.cliente}</p></strong>]
+                                    <div className='row mt-4'>
+                                        <div className='col-md-6'>
+                                            <p className='grupoListado'><strong>Servicios</strong></p>
+                                            <div>{albaran.servicios[0]?.description}</div>
+                                            <div>{albaran.servicios[1]?.description}</div>
+                                            <div>{albaran.servicios[2]?.description}</div>
+                                        </div>
+                                        <div className='col-md-6'>
+                                            <p className='grupoListado'><strong>Opciones Web</strong></p>
+                                            <div>Número páginas: {albaran.opcionesWeb.numPaginas}</div>
+                                            <div>Número idiomas: {albaran.opcionesWeb.numIdiomas}</div>
+                                        </div>
                                     </div>
-                                    <div className='col-md-4 d-flex'>
-                                        Fecha [ <strong><p>{albaran.fechaPedido}</p></strong>]
+                                    <div className='row mt-4 costesFinales'>
+                                        <div className='col-md-4'>
+                                            <p>coste servicios: <strong>{albaran.costeTotal - albaran.costeDesglosado.opcionesWeb}€</strong> </p>
+                                        </div>
+                                        <div className='col-md-4'>
+                                            <p>coste opcionales: <strong>{albaran.costeDesglosado.opcionesWeb}€</strong> </p>
+                                        </div>
+                                        <div className='col-md-4 ctotal'>
+                                            <p>coste total: <strong>{albaran.costeTotal}€</strong> </p>
+                                        </div>
                                     </div>
                                 </div>
-                                <div className='row mt-4'>
-                                    <div className='col-md-6'>
-                                        <p className='grupoListado'><strong>Servicios</strong></p>
-                                        <div>{albaran.servicios[0]?.description}</div>
-                                        <div>{albaran.servicios[1]?.description}</div>
-                                        <div>{albaran.servicios[2]?.description}</div>
-                                    </div>
-                                    <div className='col-md-6'>
-                                        <p className='grupoListado'><strong>Opciones Web</strong></p>
-                                        <div>Número páginas: {albaran.opcionesWeb.numPaginas}</div>
-                                        <div>Número idiomas: {albaran.opcionesWeb.numIdiomas}</div>
-                                    </div>
-                                </div>
-                                <div className='row mt-4 costesFinales'>
-                                    <div className='col-md-4'>
-                                        <p>coste servicios: <strong>{albaran.costeTotal - albaran.costeDesglosado.opcionesWeb}€</strong> </p>
-                                    </div>
-                                    <div className='col-md-4'>
-                                        <p>coste opcionales: <strong>{albaran.costeDesglosado.opcionesWeb}€</strong> </p>
-                                    </div>
-                                    <div className='col-md-4 ctotal'>
-                                        <p>coste total: <strong>{albaran.costeTotal}€</strong> </p>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+                            )}
                     </div>
 
                 </div>
