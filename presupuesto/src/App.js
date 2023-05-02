@@ -34,6 +34,7 @@ function App() {
         localStorage.setItem('Idiomas: ', JSON.stringify(state.numeroDeIdiomas));
         localStorage.setItem('Coste total Idiomas: ', JSON.stringify(state.numeroDeIdiomas * tarifaSuplementoWeb));
         localStorage.setItem('Seleccion', JSON.stringify(seleccionado));
+        localStorage.setItem('Presupuestos/Cliente', JSON.stringify(state.albaranes));
     }, [state.numeroDePaginas, state.numeroDeIdiomas, seleccionado, state])
 
     const botonSumar = event => {
